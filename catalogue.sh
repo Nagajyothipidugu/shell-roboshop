@@ -79,8 +79,14 @@ cp $SCRIPT_DIR/mongo.repo  /etc/yum.repos.d/mongo.repo
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing monodb" 
 
-mongosh --host mongodb.devaws46.online </app/db/master-data.js 
-VALIDATE $? "Loading data into mongodb" 
+STATUS=$(mongosh --host mongodb.daws84s.site --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+if [ $STATUS -lt 0 ]
+then
+  mongosh --host mongodb.devaws46.online < /app/db/master-data.js  &>>$LOG_FILE
+  VALIDATE $? "Loading data into mongodb" 
+else 
+  echo -e " $Y Data is already loades.... SKIPPING $N " 
+fi    
 
 
 

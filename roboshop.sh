@@ -1,7 +1,7 @@
 #!/bin/bash
 
 AMI_ID="ami-09c813fb71547fc4f"
-SG_ID="sgr-08bef5134e64f27de" # replace with your SG ID
+SG_ID="sg-061a246dd9c39e7fe" # replace with your SG ID
 INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipping" "payment" "dispatch" "frontend")
 ZONE_ID="Z00583343821Q6B1A8IK6" # replace with your ZONE ID
 DOMAIN_NAME="devaws46.online" # replace with your domain

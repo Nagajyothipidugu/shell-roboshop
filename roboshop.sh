@@ -6,15 +6,6 @@ INSTANCES=("mongodb" "redis" "mysql" "rabbitmq" "catalogue" "user" "cart" "shipp
 ZONE_ID="Z00583343821Q6B1A8IK6" # replace with your ZONE ID
 DOMAIN_NAME="devaws46.online" # replace with your domain
 
-LOGS_FOLDER="/var/log/shellscript-logs"
-SCRIPT_NAME=$(echo $0 |cut -d "." -f1 )
-LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
-PACKAGES=("mysql" "nginx" "python3" "httpd" )
-
-mkdir -p $LOGS_FOLDER 
-echo "script started executing at :: $(date)" |tee -a $LOG_FILE
-
-
 #for instance in ${INSTANCES[@]}
 for instance in $@
 do
@@ -22,10 +13,10 @@ do
     if [ $instance != "frontend" ]
     then
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
-        RECORD_NAME="$instance.$DOMAIN_NAME" &>>$LOG_FILE
+        RECORD_NAME="$instance.$DOMAIN_NAME" 
     else
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query "Reservations[0].Instances[0].PublicIpAddress" --output text)
-        RECORD_NAME="$DOMAIN_NAME" &>>$LOG_FILE
+        RECORD_NAME="$DOMAIN_NAME" 
     fi
     echo "$instance IP address: $IP"
 

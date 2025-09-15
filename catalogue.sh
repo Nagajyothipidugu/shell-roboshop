@@ -41,9 +41,14 @@ VALIDATE $? "enabling nodejs "
 
 dnf install nodejs -y  &>>$LOG_FILE
 VALIDATE $? "Installing nodejs " 
-
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop  &>>$LOG_FILE
-VALIDATE $? "Creating system user for roboshop" 
+id roboshop 
+if [ $? -ne 0 ]
+then    
+  useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop  &>>$LOG_FILE
+  VALIDATE $? "Creating system user for roboshop" 
+else 
+   echo -e "$Y System user roboshop is already created ..SKIPIING  $N" 
+fi     
 
 mkdir /app 
 VALIDATE $? "Creating app directory"
@@ -71,5 +76,7 @@ dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing monodb" 
 
 mongosh --host mongodb.devaws46.online </app/db/master-data.js 
+VALIDATE $? "Loading data into mongodb" 
+
 
 

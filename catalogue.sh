@@ -41,6 +41,7 @@ VALIDATE $? "enabling nodejs "
 
 dnf install nodejs -y  &>>$LOG_FILE
 VALIDATE $? "Installing nodejs " 
+
 id roboshop 
 if [ $? -ne 0 ]
 then    
@@ -50,7 +51,7 @@ else
    echo -e "$Y System user roboshop is already created ..SKIPIING  $N" 
 fi     
 
-mkdir /app 
+mkdir  -p /app 
 VALIDATE $? "Creating app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE

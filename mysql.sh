@@ -22,6 +22,9 @@ else
    echo -e "$G You are running with root access  $N" |tee -a $LOG_FILE
 fi  
 
+echo "Please enter root password"
+read -s MYSQL_ROOT_PASSWORD
+
 VALIDATE(){
     if [ $1 -eq 0 ] 
     then 
@@ -38,8 +41,13 @@ VALIDATE $? "Installing mysql"
 
 systemctl enable mysqld &>>LOG_FILE
 VALIDATE $? "Enabling mysql"
-systemctl start mysqld  
+systemctl start mysqld  &>>LOG_FILE
 VALIDATE $? "Start mysql" 
 
-mysql_secure_installation --set-root-pass RoboShop@1 &>>LOG_FILE
+mysql_secure_installation --set-root-pass $MYSQL_ROOT_PASSWORD &>>LOG_FILE
 VALIDATE $? "setting up the root password"
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(( $END_TIME - $START_TIME))
+
+echo -e "Script execution completed successfully..$Y total time-taken $TOTAL_TIME:seconds $N " | tee -a $LOG_FILE

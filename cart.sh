@@ -1,5 +1,4 @@
 #!/bin/bash
-
 START_TIME=$(date +%s)
 USERID=$(id -u)
 R="\e[31m"
@@ -12,7 +11,7 @@ LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
 SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER
-echo "Script started executing at: $(date)" | tee -a $LOG_FILE
+echo "Script started executing at:$(date)" | tee -a $LOG_FILE
 
 # check the user has root priveleges or not
 if [ $USERID -ne 0 ]

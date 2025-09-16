@@ -21,6 +21,9 @@ then
 else 
    echo -e "$G You are running with root access  $N" |tee -a $LOG_FILE
 fi  
+echo "Please enter root password"
+read -s MYSQL_ROOT_PASSWORD
+
 
 VALIDATE(){
     if [ $1 -eq 0 ] 
@@ -32,8 +35,7 @@ VALIDATE(){
 
      fi
     } 
-
-
+    
 dnf install maven -y  &>>$LOG_FILE
 VALIDATE $? "Installing maven " 
 
@@ -58,21 +60,34 @@ unzip /tmp/shipping.zip  &>>$LOG_FILE
 VALIDATE $? "Unzipping the code" 
 
 cd /app 
-mvn clean package 
+mvn clean package  &>>$LOG_FILE
 VALIDATE $? "installing dependecies" 
-mv target/shipping-1.0.jar shipping.jar
+mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
 VALIDATE $? "Renaming as shipping.jar"
 
 cp $SCRIPT_DIR/shipping.service  /etc/systemd/system/shipping.service 
 VALIDATE $? "copying user service" 
 
-systemctl daemon-reload
+systemctl daemon-reload &>>$LOG_FILE
 VALIDATE $? "reloading"
-systemctl enable shipping 
+systemctl enable shipping  &>>$LOG_FILE
 VALIDATE $? "Enabling shipping"
-systemctl start shipping
+systemctl start shipping &>>$LOG_FILE
 VALIDATE "Start shipping" 
 
-dnf install mysql -y 
+dnf install mysql -y  &>>$LOG_FILE
 VALIDATE $? "Installing mysql client" 
+
+mysql -h mysql.devaws46.online -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
+mysql -h mysql.devaws46.online -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/app-user.sql  &>>$LOG_FILE
+mysql -h mysql.devaws46.online -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
+VALIDATE $? "Loading the data into mysql" 
+
+systemctl restart shipping &>>$LOG_FILE
+VALIDATE $? "restarting shipping" 
+
+END_TIME=$(date +%s)
+TOTAL_TIME=$(( $END_TIME - $START_TIME))
+
+echo -e "Script execution completed successfully..$Y total time-taken $TOTAL_TIME:seconds $N " | tee -a $LOG_FILE
 

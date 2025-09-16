@@ -21,9 +21,9 @@ then
 else 
    echo -e "$G You are running with root access  $N" |tee -a $LOG_FILE
 fi  
+
 echo "Please enter root password"
 read -s MYSQL_ROOT_PASSWORD
-
 
 VALIDATE(){
     if [ $1 -eq 0 ] 
@@ -33,9 +33,9 @@ VALIDATE(){
       echo -e " $R $2 failure $N"  | tee -a $LOG_FILE
       exit 1
 
-     fi
+    fi
     } 
-    
+
 dnf install maven -y  &>>$LOG_FILE
 VALIDATE $? "Installing maven " 
 
@@ -78,10 +78,16 @@ VALIDATE "Start shipping"
 dnf install mysql -y  &>>$LOG_FILE
 VALIDATE $? "Installing mysql client" 
 
-mysql -h mysql.devaws46.online -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
-mysql -h mysql.devaws46.online -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/app-user.sql  &>>$LOG_FILE
-mysql -h mysql.devaws46.online -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
-VALIDATE $? "Loading the data into mysql" 
+mysql -h mysql.devaws46.online -uroot -p$MYSQL_ROOT_PASSWORD  -e 'use cities'
+if [ $? -ne 0 ]
+then 
+     mysql -h mysql.daws84s.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE
+    mysql -h mysql.daws84s.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/app-user.sql  &>>$LOG_FILE
+    mysql -h mysql.daws84s.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/master-data.sql &>>$LOG_FILE
+    VALIDATE $? "Loading data into MySQL"
+else
+    echo -e "Data is already loaded into MySQL ... $Y SKIPPING $N"
+fi
 
 systemctl restart shipping &>>$LOG_FILE
 VALIDATE $? "restarting shipping" 

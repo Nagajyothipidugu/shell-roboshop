@@ -24,17 +24,16 @@ fi
 
 echo "Please enter root password"
 read -s MYSQL_ROOT_PASSWORD
-
+# validate functions takes input as exit status, what command they tried to install
 VALIDATE(){
-    if [ $1 -eq 0 ] 
-    then 
-      echo -e " $G $2 success... $N" | tee -a $LOG_FILE
-    else 
-      echo -e " $R $2 failure $N"  | tee -a $LOG_FILE
-      exit 1
-
-     fi
-    } 
+    if [ $1 -eq 0 ]
+    then
+        echo -e "$2 is ... $G SUCCESS $N" | tee -a $LOG_FILE
+    else
+        echo -e "$2 is ... $R FAILURE $N" | tee -a $LOG_FILE
+        exit 1
+    fi
+}
 
 dnf install maven -y  &>>$LOG_FILE
 VALIDATE $? "Installing maven " 
@@ -73,7 +72,7 @@ VALIDATE $? "reloading"
 systemctl enable shipping  &>>$LOG_FILE
 VALIDATE $? "Enabling shipping"
 systemctl start shipping &>>$LOG_FILE
-VALIDATE "Start shipping" 
+VALIDATE $? "Start shipping" 
 
 dnf install mysql -y  &>>$LOG_FILE
 VALIDATE $? "Installing mysql client" 

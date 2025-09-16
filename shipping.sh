@@ -77,7 +77,7 @@ VALIDATE $? "Start shipping"
 dnf install mysql -y  &>>$LOG_FILE
 VALIDATE $? "Installing mysql client" 
 
-mysql -h mysql.devaws46.online -uroot -p$MYSQL_ROOT_PASSWORD  -e 'use cities'
+mysql -h mysql.devaws46.online -u root -p$MYSQL_ROOT_PASSWORD -e 'use cities' &>>$LOG_FILE
 if [ $? -ne 0 ]
 then 
      mysql -h mysql.daws84s.site -uroot -p$MYSQL_ROOT_PASSWORD < /app/db/schema.sql &>>$LOG_FILE

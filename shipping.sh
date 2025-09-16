@@ -33,7 +33,7 @@ VALIDATE(){
       echo -e " $R $2 failure $N"  | tee -a $LOG_FILE
       exit 1
 
-    fi
+     fi
     } 
 
 dnf install maven -y  &>>$LOG_FILE

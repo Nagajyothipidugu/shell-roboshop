@@ -44,8 +44,8 @@ systemctl enable rabbitmq-server &>>LOG_FILE
 systemctl start rabbitmq-server &>>LOG_FILE
 VALIDATE $? "Starting rabbitmq" 
 
-rabbitmqctl add_user roboshop $RABBITMQ_PASSWORD 
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" 
+rabbitmqctl add_user roboshop $RABBITMQ_PASSWORD  &>>$LOG_FILE
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"  &>>$LOG_FILE
 
 END_TIME=$(date +%s)
 TOTAL_TIME=$(( $END_TIME - $START_TIME))

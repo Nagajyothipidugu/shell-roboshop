@@ -22,7 +22,7 @@ else
    echo -e "$G You are running with root access  $N" |tee -a $LOG_FILE
 fi  
 
-echo "Please enter root password"
+echo "Please enter the root password to setup"
 read -s MYSQL_ROOT_PASSWORD
 
 VALIDATE(){

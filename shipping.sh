@@ -55,14 +55,14 @@ VALIDATE $? "Downloading the shipping code"
 
 rm -rf /app/*
 cd /app 
-unzip /tmp/shipping.zip  &>>$LOG_FILE
-VALIDATE $? "Unzipping the code" 
+unzip /tmp/shipping.zip &>>$LOG_FILE
+VALIDATE $? "unzipping shipping"
 
-cd /app 
 mvn clean package  &>>$LOG_FILE
-VALIDATE $? "installing dependecies" 
-mv target/shipping-1.0.jar shipping.jar &>>$LOG_FILE
-VALIDATE $? "Renaming as shipping.jar"
+VALIDATE $? "Packaging the shipping application"
+
+mv target/shipping-1.0.jar shipping.jar  &>>$LOG_FILE
+VALIDATE $? "Moving and renaming Jar file"
 
 cp $SCRIPT_DIR/shipping.service  /etc/systemd/system/shipping.service 
 VALIDATE $? "copying shipping service" 

@@ -35,7 +35,7 @@ VALIDATE(){
 }
 
 dnf install python3 gcc python3-devel -y &>>$LOG_FILE
-VALIDATE $? "Installing python " 
+VALIDATE $? "Installing python3 " 
 
 id roboshop 
 if [ $? -ne 0 ]

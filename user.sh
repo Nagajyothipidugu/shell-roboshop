@@ -54,7 +54,7 @@ fi
 mkdir  -p /app 
 VALIDATE $? "Creating app directory"
 
-curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
+curl -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip  &>>$LOG_FILE
 VALIDATE $? "Downloading the user code"
 
 rm -rf /app/*
@@ -70,8 +70,8 @@ cp $SCRIPT_DIR/user.service  /etc/systemd/system/user.service
 VALIDATE $? "copying user service" 
 
 systemctl daemon-reload &>>$LOG_FILE
-systemctl enable catalogue  &>>$LOG_FILE
-systemctl start catalogue 
+systemctl enable user  &>>$LOG_FILE
+systemctl start user 
 VALIDATE $? "starting user" 
 
 END_TIME=$(date +%s)
